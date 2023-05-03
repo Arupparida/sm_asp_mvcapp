@@ -3,4 +3,7 @@ The below command is taken from the docker documentation , not required for this
 docker run -p 8088:80 -d --name welcome-to-docker docker/welcome-to-docker
 
 docker pull mcr.microsoft.com/mssql/server - this is for pulling the sql server image to docker
- docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASWWORD=StrongPa@@w0rd' -p 1400:1433 -d mcr.microsoft.com/mssql/server - this is to run commands -check for port availability ACCEPT_EULA is for sql server.
+ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=StrongPa@@w0rd' -p 1400:1433 -d mcr.microsoft.com/mssql/server - this is to run commands -check for port availability ACCEPT_EULA is for sql server.
+
+
+  docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=StrongPa@@w0rd' -p 1400:1433 -d mcr.microsoft.com/mssql/server
