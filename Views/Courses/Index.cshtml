@@ -34,7 +34,7 @@
                 <td>
                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Old Delete</a>
+                    <!--<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Old Delete</a>-->
                     <!--added deleteBtn for jquery purpose below-->
                     <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Delete</button>
                 </td>
@@ -50,6 +50,7 @@
 @section Scripts{
     <script>
         $(function () {
+            $('.table').DataTable(); //taken from datatable website and changed the class call parameter to .table
             $('.deleteBtn').click(function (e) {
                 Swal.fire({
                     title: 'Are you sure?',
