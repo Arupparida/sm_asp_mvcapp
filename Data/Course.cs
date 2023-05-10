@@ -10,4 +10,6 @@ public partial class Course
     public string FirstName { get; set; } = null!;
 
     public string? Code { get; set; }
+
+    public virtual ICollection<Class> Classes { get; set; } = new List<Class>();
 }
