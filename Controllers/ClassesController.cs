@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementApp.MVC.Data;
+using SchoolManagementApp.MVC.Models;
+
 
 namespace SchoolManagementApp.MVC.Controllers
 {
@@ -162,7 +164,66 @@ namespace SchoolManagementApp.MVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        
+        //added action against the view added in the view section
+        //So when we click maanagementenrollment  button in the UI then it's going to call this action.
+        public async Task<ActionResult> ManageEnrollments(int id){
+            var @class = await _context.Classes
+                .Include(q => q.Course)
+                .Include(q => q.Lecture)
+                .Include(q=>q.Enrollments)
+                //Now we trying something similar to sql joins , as we need to show enrollments for students hence we need students which include all the above includes so basically we want "student enrollments with enrolled course,lecture all tied together just like a sql join" and hence we use "Theninclude" feature here.
+                    .ThenInclude(q=>q.Student)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            var students = await _context.Students.ToListAsync();
+            //the above query get all the student into the system "the ToListAshync() is the one that executes the query"
 
+            var model = new ClassEnrollmentViewModel();
+            model.Class = @class; // This mean the model is getting the data from the class which is created above.Not to confuse with the keyword class because here its a name not a c# specfic keyword hence we are using the "@" symbol before it.
+            //similar to above additon of student to the system we now add the model for the same purpose.
+
+             foreach (var stu in students)
+            {
+                model.Students.Add(new StudentEnrollmentViewModel
+                {
+                    Id = stu.Id,
+                    FirstName = stu.FirstName,
+                    LastName = stu.LastName,
+                    IsEnrolled = (@class?.Enrollments?.Any(q => q.StudentId == stu.Id))
+                        .GetValueOrDefault()
+                });
+            }
+            
+            return View(model);
+            //So model here is after we got the data from the database, then we started to massage our own interpretation and representation of the data for our view.
+            //Now that was our first action completed.
+            //Now the second action would be the one to actually assign the student.
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<ActionResult> EnrollStudent(int classId, int studentId, bool shouldEnroll)
+        {
+            var enrollment = new Enrollment();
+            if(shouldEnroll == true)
+            {
+                enrollment.ClassId = classId;
+                enrollment.StudentId = studentId;
+                await _context.AddAsync(enrollment);
+            }
+            else 
+            {
+                enrollment = await _context.Enrollments.FirstOrDefaultAsync(
+                    q => q.ClassId ==classId && q.StudentId == studentId);
+                if (enrollment != null){
+                    _context.Remove(enrollment);
+                }                
+            }
+            await _context.SaveChangesAsync(); //Important to save all the changes to database as well
+            return RedirectToAction(nameof(ManageEnrollments),
+            new {id = classId});
+        }
+        
         private bool ClassExists(int id)
         {
           return (_context.Classes?.Any(e => e.Id == id)).GetValueOrDefault();
