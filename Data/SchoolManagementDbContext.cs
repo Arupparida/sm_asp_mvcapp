@@ -30,8 +30,8 @@ public partial class SchoolManagementDbContext : DbContext
             entity.HasOne(d => d.Course).WithMany(p => p.Classes)
                 .HasForeignKey(d => d.CourseId)
                 .HasConstraintName("FK__Classes__CourseI__70DDC3D8");
-
-            entity.HasOne(d => d.Lecture).WithMany(p => p.Classes)
+//changes made here 
+            entity.HasOne(d => d.Lecturer).WithMany(p => p.Classes)
                 .HasForeignKey(d => d.LectureId)
                 .HasConstraintName("FK__Classes__Lecture__6FE99F9F");
         });

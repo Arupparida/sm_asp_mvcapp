@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.Course)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Lecture)
+                @Html.DisplayNameFor(model => model.Lecturer)
             </th>
             <th></th>
         </tr>
@@ -35,16 +35,17 @@
                     @item.Course.Code - @item.Course.FirstName
                 </td>
                 <td>
-                    @item.Lecture.FirstName @item.Lecture.LastName
+                    @item.Lecturer.FirstName @item.Lecturer.LastName
                 </td>
                 <td>
                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
                     <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Delete</button>
-                    <a asp-action="ManageEnrollment" class="btn btn-success" asp-route-itemid="@item.Id">
+                    <a asp-action="ManageEnrollments" class="btn btn-success" asp-route-itemid="@item.Id">
                         Manage Enrollments
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    
+                    <!-- <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> -->
                 </td>
             </tr>
         }

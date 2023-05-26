@@ -25,7 +25,7 @@ namespace SchoolManagementApp.MVC.Controllers
         // GET: Classes
         public async Task<IActionResult> Index()
         {
-            var schoolManagementDbContext = _context.Classes.Include(q => q.Course).Include(q => q.Lecture);
+            var schoolManagementDbContext = _context.Classes.Include(q => q.Course).Include(q => q.Lecturer);
             return View(await schoolManagementDbContext.ToListAsync());
         }
 
@@ -39,7 +39,7 @@ namespace SchoolManagementApp.MVC.Controllers
 
             var @class = await _context.Classes
                 .Include(q => q.Course)
-                .Include(q => q.Lecture)
+                .Include(q => q.Lecturer)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@class == null)
             {
@@ -136,7 +136,7 @@ namespace SchoolManagementApp.MVC.Controllers
 
             var @class = await _context.Classes
                 .Include(q => q.Course)
-                .Include(q => q.Lecture)
+                .Include(q => q.Lecturer)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@class == null)
             {
@@ -170,7 +170,7 @@ namespace SchoolManagementApp.MVC.Controllers
         public async Task<ActionResult> ManageEnrollments(int id){
             var @class = await _context.Classes
                 .Include(q => q.Course)
-                .Include(q => q.Lecture)
+                .Include(q => q.Lecturer)
                 .Include(q=>q.Enrollments)
                 //Now we trying something similar to sql joins , as we need to show enrollments for students hence we need students which include all the above includes so basically we want "student enrollments with enrolled course,lecture all tied together just like a sql join" and hence we use "Theninclude" feature here.
                     .ThenInclude(q=>q.Student)
